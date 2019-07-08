@@ -1,18 +1,18 @@
 <template>
   <div>
-    <router-view/>
+    <p>Login</p>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App',
-  data() {
+  name: 'login',
+  data () {
     return {
     }
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 </style>
