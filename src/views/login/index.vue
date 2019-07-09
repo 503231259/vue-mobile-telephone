@@ -21,7 +21,9 @@
         required
       />
     </van-cell-group>
-    <van-button type="info" @click="handleCommit">提交</van-button>
+    <div class="commitDiv">
+      <van-button type="info" @click="handleCommit" class="btn">提交</van-button>
+    </div>
   </div>
 </template>
 
@@ -51,4 +53,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.commitDiv {
+  // width: 355px;
+  padding: 10px;
+  .btn {
+    width: 100%;
+  }
+}
 </style>
