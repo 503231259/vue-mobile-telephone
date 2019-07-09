@@ -28,25 +28,26 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { login } from '@/api/user.js'
 export default {
   name: 'login',
   data () {
     return {
       formdata: {
-        mobile: '',
-        code: ''
+        mobile: '13351234766',
+        code: '123456'
       }
     }
   },
   methods: {
     async handleCommit () {
-      let res = await axios({
-        method: 'POST',
-        url: 'http://toutiao.course.itcast.cn/app/v1_0/authorizations',
-        data: this.formdata
-      })
-      console.log(res)
+      console.log(this.formdata)
+      try {
+        let res = await login(this.formdata)
+        console.log(res)
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
