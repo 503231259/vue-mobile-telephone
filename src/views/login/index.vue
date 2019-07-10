@@ -29,6 +29,7 @@
 
 <script>
 import { login } from '@/api/user.js'
+import { setUser } from '@/utils/auth.js'
 export default {
   name: 'login',
   data () {
@@ -44,7 +45,12 @@ export default {
       console.log(this.formdata)
       try {
         let res = await login(this.formdata)
-        console.log(res)
+        // console.log(res.data.data)
+        let data = res.data.data.token
+        // token设置本地储存
+        setUser(data)
+        // token保存到vuex
+        this.$store.commit('setUser', data)
       } catch (error) {
         console.log(error)
       }
