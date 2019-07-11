@@ -8,11 +8,14 @@
         v-model="formdata.mobile"
         required
         clearable
-        label="用户名"
-        right-icon="question-o"
+        label="手机号"
         placeholder="请输入用户名"
         @click-right-icon="$toast('question')"
+        v-validate="'required|digits:11'"
+        name="mobile"
+        :error-message="errors.first('mobile')"
       />
+      <!-- <span>{{ errors.first('digits_field') }}</span> -->
       <van-field
         v-model="formdata.code"
         type="password"
@@ -22,7 +25,12 @@
       />
     </van-cell-group>
     <div class="commitDiv">
-      <van-button type="info" @click="handleCommit" class="btn">提交</van-button>
+      <van-button
+      type="info"
+      @click="handleCommit"
+      class="btn"
+      :loading="isloading"
+      >提交</van-button>
     </div>
   </div>
 </template>
@@ -36,9 +44,14 @@ export default {
     return {
       formdata: {
         mobile: '13351234766',
-        code: '123456'
-      }
+        code: '246810'
+      },
+      isloading: false
     }
+  },
+  created () {
+    // 覆盖验证信息提示为中文
+    this.VerificationInformationPrompt()
   },
   methods: {
     async handleCommit () {
@@ -54,6 +67,19 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    // 验证信息提示
+    VerificationInformationPrompt () {
+      const dict = {
+        custom: {
+          mobile: {
+            required: '手机号不能为空',
+            digits: '输入十一位'
+          }
+        }
+      }
+      // zh_CN是中文
+      this.$validator.localize('zh_CN', dict)
     }
   }
 }

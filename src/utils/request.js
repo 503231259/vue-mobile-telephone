@@ -2,7 +2,8 @@ import axios from 'axios' // 引入axios模块
 
 // 自定义配置
 const request = axios.create({
-  baseURL: 'http://toutiao.course.itcast.cn'
+  // baseURL: 'http://toutiao.course.itcast.cn'// 密码123456
+  baseURL: 'http://ttapi.research.itcast.cn/'// 密码246810
 })
 
 // 添加请求拦截器
