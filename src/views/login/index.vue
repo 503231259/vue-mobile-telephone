@@ -54,18 +54,33 @@ export default {
     this.VerificationInformationPrompt()
   },
   methods: {
+    // 发送登录请求
     async handleCommit () {
-      console.log(this.formdata)
+      // 按钮loading  开启
+      this.isloading = true
       try {
-        let res = await login(this.formdata)
-        // console.log(res.data.data)
+        // .then 是promise异步请求,要用await编变成同步
+        const valid = await this.$validator.validate()
+        if (!valid) {
+          this.$notify('需要满足条件')
+          this.isloading = false// 按钮loading  关闭
+          return
+        }
+        let res = await login(this.formdata) // 发送请求
         let data = res.data.data.token
         // token设置本地储存
         setUser(data)
         // token保存到vuex
         this.$store.commit('setUser', data)
+        this.isloading = false// 按钮loading  关闭
+        this.$notify({
+          message: '登录成功',
+          background: '#00C061'
+        })
       } catch (error) {
-        console.log(error)
+        console.log(error)// 输出错误
+        this.isloading = false// 按钮loading  关闭
+        this.$notify('登录失败')
       }
     },
     // 验证信息提示
