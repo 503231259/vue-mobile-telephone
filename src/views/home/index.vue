@@ -4,7 +4,7 @@
       title="首页"
     />
     <van-tabs v-model="activeChannelIndex">
-      <van-tab title="标签1">
+      <van-tab :title="item.name" v-for="item in channel" :key="item.id">
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
           <van-list
            v-model="loading"
@@ -20,13 +20,12 @@
           </van-list>
         </van-pull-refresh>
       </van-tab>
-      <van-tab title="标签 2">内容 2</van-tab>
-      <van-tab title="标签 3">内容 3</van-tab>
-      <van-tab title="标签 4">内容 4</van-tab>
     </van-tabs>
   </div>
 </template>
 <script>
+// 引入频道列表接口
+import { channelList } from '@/api/channel.js'
 export default {
   name: 'home',
   data () {
@@ -37,8 +36,13 @@ export default {
       loading: false,
       finished: false,
       // 下拉
-      isLoading: false
+      isLoading: false,
+      // 频道
+      channel: []
     }
+  },
+  created () {
+    this.channelListGain()
   },
   methods: {
     // 上拉下拉
@@ -61,8 +65,12 @@ export default {
       setTimeout(() => {
         this.$toast('刷新成功')
         this.isLoading = false
-        this.count++
       }, 500)
+    },
+    async channelListGain () {
+      let channelList1 = await channelList()
+      console.log(channelList1.data.data.channels)
+      this.channel = channelList1.data.data.channels
     }
   }
 }

@@ -77,6 +77,9 @@ export default {
           message: '登录成功',
           background: '#00C061'
         })
+        this.$router.push({
+          name: 'home'
+        })
       } catch (error) {
         console.log(error)// 输出错误
         this.isloading = false// 按钮loading  关闭

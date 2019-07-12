@@ -1,4 +1,5 @@
 import axios from 'axios' // 引入axios模块
+import store from '@/store'
 
 // 自定义配置
 const request = axios.create({
@@ -9,6 +10,11 @@ const request = axios.create({
 // 添加请求拦截器
 request.interceptors.request.use(function (config) {
   // 在发送请求之前做一些事情
+  const { user } = store.state
+  console.log(user)
+  if (user) {
+    config.headers.Authorization = `Bearer ${user}`
+  }
   return config
 }, function (error) {
   // 执行请求错误的操作
