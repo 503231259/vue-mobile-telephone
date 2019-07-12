@@ -11,7 +11,7 @@ const request = axios.create({
 request.interceptors.request.use(function (config) {
   // 在发送请求之前做一些事情
   const { user } = store.state
-  console.log(user)
+  // console.log(user)
   if (user) {
     config.headers.Authorization = `Bearer ${user}`
   }
