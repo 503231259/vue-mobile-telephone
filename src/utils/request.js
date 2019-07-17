@@ -7,7 +7,9 @@ const request = axios.create({
   baseURL: 'http://ttapi.research.itcast.cn/'// 密码246810
 })
 
-// 添加请求拦截器
+/*
+ * 添加请求拦截器
+ */
 request.interceptors.request.use(function (config) {
   // 在发送请求之前做一些事情
   const { user } = store.state
@@ -21,10 +23,13 @@ request.interceptors.request.use(function (config) {
   return Promise.reject(error)
 })
 
-// 添加响应拦截器
+/**
+ * 添加响应拦截器
+ */
 request.interceptors.response.use(function (response) {
   // 对响应数据做一些事情
-  return response
+  let data = response.data.data || response.data
+  return data
 }, function (error) {
   // 做一些有响应错误的事情
   return Promise.reject(error)
