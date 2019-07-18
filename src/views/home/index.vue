@@ -50,6 +50,7 @@ export default {
     }
   },
   created () {
+    // console.log('123')
     this.channelListGain()
   },
 
@@ -60,9 +61,21 @@ export default {
     }
   },
 
+  watch: {
+    // 监听Vuex的user
+    '$store.state.user' () {
+      console.log('a')
+      // 改变,重新获取频道列表
+      this.channelListGain()
+      // 上拉组件是有触发条件的,就是loading为true,就会自动加载数据填满屏幕
+      this.activeChannel.upPullLoading = true
+    }
+  },
+
   methods: {
     /**
      * 上拉加载更多,push数据
+     * 请求数据
      */
     async onLoad () {
       // 缓冲时间

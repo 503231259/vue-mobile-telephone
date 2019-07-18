@@ -68,7 +68,7 @@ export default {
         }
         let res = await login(this.formdata) // 发送请求
         // console.log(res)
-        let data = res.data.data.token
+        let data = res.token
         // token设置本地储存
         setUser(data)
         // token保存到vuex
