@@ -60,17 +60,29 @@ export default {
      * 上拉加载更多,push数据
      */
     async onLoad () {
+      // 缓冲时间
+      await this.$sleep(800)
       let data = null
-      // 获取数据
+      // 获取数据,里面有个假设的时间戳
       data = await this.loadArticles()
+      // 判断有没有数据了,条件是没有时间戳和没有数据
+      if (!data.pre_timestamp && !data.results.length) {
+        // 没有数据后,设置数据加载完毕,给出提示
+        this.activeChannel.upPullFinished = true
+        // 取消loading
+        this.activeChannel.upPullLoading = false
+        return
+      }
       // console.log(data)
-      // 解决初始化,没有数据的时候
+      // 解决初始化,没有数据的时候,返回的数据有时间戳,但是没有数据时
+      // 为啥没有数据,因发送的事件戳不正确
       if (data.pre_timestamp && !data.results.length) {
+        // 用后台返回的真时间戳去请求数据和下一次的事件戳
         this.activeChannel.timestamp = data.pre_timestamp
         data = await this.loadArticles()
       }
-      console.log(data.results)
-      // 改变时间戳
+      // console.log(data.results)
+      // 改变时间戳,用于下次请求用的时间戳
       this.activeChannel.timestamp = data.pre_timestamp
       // 当前的频道列表赋值
       this.activeChannel.articles.push(...data.results)
@@ -124,7 +136,7 @@ export default {
         item.timestamp = Date.now() // 时间戳
         item.downPullLoading = false // 控制当前频道的下拉刷新loading状态
         item.upPullLoading = false // 控制当前频道上拉加载loading状态
-        item.upPulFinished = false // 控制当前频道数据是否加载完毕
+        item.upPullFinished = false // 控制当前频道数据是否加载完毕
       })
       this.channel = channel
     },

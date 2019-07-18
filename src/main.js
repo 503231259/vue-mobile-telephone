@@ -1,3 +1,4 @@
+/* eslint-disable promise/param-names */
 import Vue from 'vue'
 import App from './App.vue'// 根界面
 import router from './router'// 路由
@@ -16,6 +17,14 @@ Vue.use(VeeValidate)
 Validator.localize('zh_CN', zhCN)
 
 Vue.use(Vant)// 挂载vant-ui
+
+Vue.prototype.$sleep = time => {
+  return new Promise((resovle, reject) => {
+    window.setTimeout(() => {
+      resovle()
+    }, time)
+  })
+}
 
 Vue.config.productionTip = false
 
