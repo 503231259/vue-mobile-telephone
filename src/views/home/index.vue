@@ -7,7 +7,12 @@
       :key="channelItem.id"
       :title="channelItem.name"
       >
-        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <van-pull-refresh
+        v-model="channelItem.downPullLoading"
+        @refresh="onRefresh"
+        :success-text="channelItem.downPullSuccessText"
+        :success-duration="1000"
+        >
           <van-list
            v-model="channelItem.upPullLoading"
            :finished="channelItem.upPulFinished"
@@ -93,11 +98,35 @@ export default {
     /**
      * 下拉刷新数据,重置列表数据
      */
-    onRefresh () {
-      setTimeout(() => {
-        this.$toast('刷新成功')
-        this.isLoading = false
-      }, 500)
+    async onRefresh () {
+      /**
+       * 备份一下现在有的事件戳,
+       * 因:如果没有数据的话,还是要用到这个时间戳用来刷新下一页数据的
+       */
+      const timestamp = this.activeChannel.timestamp
+      // 备份完毕后,修改时间戳为当前时间
+      this.activeChannel.timestamp = Date.now()
+      // 发送请求的时间戳是当前时间的
+      const data = await this.loadArticles()
+      // console.log(data)
+      if (data.results.length) {
+        // 如果有新的数据,就覆盖原来的数据
+        this.activeChannel.articles = data.results
+        // 把新的数据中的时间戳更新
+        this.activeChannel.timestamp = data.pre_timestamp
+        this.activeChannel.downPullSuccessText = '更新成功'
+        // 当刷新不满一屏,继续加载数据
+        this.onload()
+      } else {
+        this.activeChannel.downPullSuccessText = '已是最新数据'
+      }
+      // 下拉刷新结束,取消loading状态
+      this.activeChannel.downPullLoading = false
+      /**
+       * 下拉刷新后,恢复原来上拉的时间戳,上拉的时候就直接用了(获取下一页)
+       * 不论下拉刷新有没有数据,都要把保存的时间戳恢复过来,
+       */
+      this.activeChannel.timestamp = timestamp
     },
 
     /**
