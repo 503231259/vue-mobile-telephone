@@ -8,7 +8,7 @@
     <div @click="$emit('input',false)">
       <van-icon name="clear" />
     </div>
-    <!-- 头 -->
+    <!-- 我的频道 -->
     <div>
       <div class="fontSize">
         <div>
@@ -39,14 +39,43 @@
         </van-grid>
       </div>
     </div>
+    <!-- /我的频道 -->
+
+    <!-- 所有频道 -->
+    <div>
+      <div class="fontSize">
+          <span>所有频道</span>
+      </div>
+      <div>
+        <van-grid
+        :column-num="4"
+        :gutter="10"
+        clickable
+        >
+          <van-grid-item
+            v-for=" item in channelAlldata "
+            :key="item.id"
+          >
+            <span
+            slot="text"
+            class="asd"
+            >{{ item.name }}
+            </span>
+          </van-grid-item>
+        </van-grid>
+      </div>
+    </div>
+    <!-- /所有频道 -->
   </van-popup>
 </template>
 
 <script>
+import { channelAll } from '@/api/channel'
 export default {
   name: 'homeChannel',
   data () {
     return {
+      channelAlldata: []
     }
   },
   props: {
@@ -61,6 +90,19 @@ export default {
     activeChannelIndex: {
       type: Number,
       defaylt: 0
+    }
+  },
+
+  created () {
+    this.channelAll()
+  },
+
+  methods: {
+    // 获取所有频道列表
+    async channelAll () {
+      let data = await channelAll()
+      // console.log(data)
+      this.channelAlldata = data.channels
     }
   }
 }

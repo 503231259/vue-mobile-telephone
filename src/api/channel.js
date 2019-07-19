@@ -8,3 +8,11 @@ export const channelList = () => {
     method: 'GET'
   })
 }
+
+// 所有频道列表
+export const channelAll = () => {
+  return request({
+    url: '/app/v1_0/channels',
+    method: 'GET'
+  })
+}
