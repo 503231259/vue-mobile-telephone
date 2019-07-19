@@ -34,7 +34,12 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
-   <HomeChannel v-model="isChannelShow"></HomeChannel>
+   <HomeChannel
+   v-model="isChannelShow"
+   :channel="channel"
+   :activeChannelIndex="activeChannelIndex"
+   >
+   </HomeChannel>
   </div>
 </template>
 <script>
@@ -50,7 +55,7 @@ export default {
       // 频道
       channel: [],
       // 频道底部弹出
-      isChannelShow: false
+      isChannelShow: true
     }
   },
   components: {
