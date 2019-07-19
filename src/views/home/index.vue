@@ -2,6 +2,9 @@
   <div>
     <van-nav-bar title="首页" fixed/>
     <van-tabs v-model="activeChannelIndex" class="channel-tabs">
+      <!-- <div slot="nav-right" class="wap-nav" >
+        <van-icon name="wap-nav" />
+      </div> -->
       <van-tab
       v-for="channelItem in channel"
       :key="channelItem.id"
@@ -63,12 +66,16 @@ export default {
 
   watch: {
     // 监听Vuex的user
-    '$store.state.user' () {
-      console.log('a')
+    async '$store.state.user' () {
+      // console.log('a')
       // 改变,重新获取频道列表
-      this.channelListGain()
+      await this.channelListGain()
+      // console.log(data)
+      console.log('1')
+      await this.onLoad()
+      console.log('2')
+      // this.activeChannel.upPullLoading = true
       // 上拉组件是有触发条件的,就是loading为true,就会自动加载数据填满屏幕
-      this.activeChannel.upPullLoading = true
     }
   },
 
@@ -211,5 +218,8 @@ export default {
 }
 .channel-tabs /deep/ .van-tabs__content {
   margin-top: 100px;
+}
+.menu {
+  float:right;
 }
 </style>
