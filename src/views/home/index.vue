@@ -2,9 +2,12 @@
   <div>
     <van-nav-bar title="首页" fixed/>
     <van-tabs v-model="activeChannelIndex" class="channel-tabs">
-      <!-- <div slot="nav-right" class="wap-nav" >
-        <van-icon name="wap-nav" />
-      </div> -->
+      <!-- Vant有自己的插槽名称 -->
+      <div slot="nav-right" class="wap-nav" @click="isChannelShow = true">
+      <!-- <slot name="nav-right" class="wap-nav"> -->
+        <van-icon name="wap-nav" class="wap-nav1"/>
+      <!-- </slot> -->
+      </div>
       <van-tab
       v-for="channelItem in channel"
       :key="channelItem.id"
@@ -31,26 +34,27 @@
         </van-pull-refresh>
       </van-tab>
     </van-tabs>
+   <HomeChannel v-model="isChannelShow"></HomeChannel>
   </div>
 </template>
 <script>
 // 引入频道列表接口
 import { channelList } from '@/api/channel.js'
 import { getArticles } from '@/api/article'
+import HomeChannel from './compenents/channel'
 export default {
   name: 'home',
   data () {
     return {
       activeChannelIndex: 0,
-      // 上拉
-      list: [], // 循环的数据
-      loading: false,
-      finished: false,
-      // 下拉
-      isLoading: false,
       // 频道
-      channel: []
+      channel: [],
+      // 频道底部弹出
+      isChannelShow: false
     }
+  },
+  components: {
+    HomeChannel
   },
   created () {
     // console.log('123')
@@ -67,15 +71,10 @@ export default {
   watch: {
     // 监听Vuex的user
     async '$store.state.user' () {
-      // console.log('a')
       // 改变,重新获取频道列表
       await this.channelListGain()
-      // console.log(data)
-      console.log('1')
+      // 请求上拉数据
       await this.onLoad()
-      console.log('2')
-      // this.activeChannel.upPullLoading = true
-      // 上拉组件是有触发条件的,就是loading为true,就会自动加载数据填满屏幕
     }
   },
 
@@ -219,7 +218,14 @@ export default {
 .channel-tabs /deep/ .van-tabs__content {
   margin-top: 100px;
 }
-.menu {
-  float:right;
+
+.channel-tabs /deep/ .wap-nav {
+  position: fixed;
+  right: 0;
+  background: #fff;
+  padding-top: 7px;
+  .wap-nav1 {
+    font-size: 70px;
+  }
 }
 </style>
