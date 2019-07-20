@@ -53,7 +53,7 @@
         clickable
         >
           <van-grid-item
-            v-for=" item in channelAlldata "
+            v-for=" item in recommendChannels "
             :key="item.id"
           >
             <span
@@ -97,6 +97,20 @@ export default {
     this.channelAll()
   },
 
+  computed: {
+    recommendChannels () {
+      // 保存用户频道的id
+      let itemID = this.channel.map(item => item.id)
+
+      // 返回一个过滤好的数组
+      return this.channelAlldata.filter(item => {
+        // 循环 channelAlldata 每一项,回调函数的return返回boolean值,需求是循环到用户频道返回false,其他的为true
+        // 用id为条件
+        return !itemID.includes(item.id)
+      })
+    }
+  },
+
   methods: {
     // 获取所有频道列表
     async channelAll () {
@@ -118,9 +132,9 @@ export default {
   font-size: 30px;
 }
 .fontSize /deep/ span {
-    font-size: 30px;
+    font-size: 25px;
   }
   .asd{
-    font-size: 30px;
+    font-size: 25px;
   }
 </style>
